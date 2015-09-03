@@ -10,6 +10,12 @@ int main() {
 
     // TODO: Finish the program!
 
-    std::cout << "Have a nice Life!" << std::endl;
+    std::cout << "Welcome to the TDDD86 Game of Life," << std::endl
+            << "a simulation of the lifecycle of a bacteria colony." << std::endl
+            << "Cells (X) live and die by the following rules:" << std::endl
+            << "- A cell with 1 or fewer neighbours dies." << std::endl
+            << "- Locations with 2 neighbours remain stable." << std::endl
+            << "- Locations with 3 neighbours will create life." << std::endl
+            << "- A cell with 4 or more neighbours dies." << std::endl;
     return 0;
 }
