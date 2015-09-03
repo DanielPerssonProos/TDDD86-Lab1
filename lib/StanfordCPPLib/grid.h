@@ -423,8 +423,8 @@ template <typename ValueType>
 void Grid<ValueType>::resize(int nRows, int nCols) {
     if (nRows < 0 || nCols < 0) {
         throw std::invalid_argument("Attempt to resize grid to invalid size ("
-                                    + toString(nRows) + ", "
-                                    + toString(nCols) + ")");
+                                    + std::to_string(nRows) + ", "
+                                    + std::to_string(nCols) + ")");
     }
     if (elements != NULL) delete[] elements;
     this->nRows = nRows;
