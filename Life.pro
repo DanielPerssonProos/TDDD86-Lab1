@@ -1,6 +1,7 @@
 TEMPLATE = app
 
 CONFIG += console
+CONFIG += c++11
 # Make sure we do not accidentally #include files placed in 'resources'
 CONFIG += no_include_pwd
 
