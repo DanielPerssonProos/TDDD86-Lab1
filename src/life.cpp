@@ -22,13 +22,14 @@ int main() {
                 << "- A cell with 1 or fewer neighbours dies." << std::endl
                 << "- Locations with 2 neighbours remain stable." << std::endl
                 << "- Locations with 3 neighbours will create life." << std::endl
-                << "- A cell with 4 or more neighbours dies." << std::endl;
+                << "- A cell with 4 or more neighbours dies." << std::endl << std::endl;
 
 
 
     std::string filename;
     std::cout << "Please enter file name: " << std::endl;
     std::cin >> filename;
+
     ifstream stream;
     getFile(stream, filename);
 
