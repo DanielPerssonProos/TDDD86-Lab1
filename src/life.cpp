@@ -98,10 +98,13 @@ void advanceGeneration(Grid<char>& oldGen) {
 void tick(Grid<char>& grid) {
     advanceGeneration(grid);
     pause(100);
-    clearConsole();
+    //clearConsole();
 }
 
 int main() {
+    char mSignAnimate = 'a';
+    char mSignTick    = 't';
+    char mSignQuit    = 'q';
 
     std::cout << "Welcome to the TDDD86 Game of Life," << std::endl
                 << "a simulation of the lifecycle of a bacteria colony." << std::endl
@@ -112,9 +115,21 @@ int main() {
                 << "- A cell with 4 or more neighbours dies." << std::endl;
 
     Grid<char> grid = loadGrid();
+    char menuChoice;
+
     while (true) {
         printGrid(grid);
-        tick(grid);
+        std::cin >> menuChoice;
+
+        if (menuChoice == mSignTick) {
+            advanceGeneration(grid);
+        } else if (menuChoice == mSignQuit) {
+            break;
+        } else if (menuChoice == mSignAnimate) {
+            while (true) {
+                tick(grid);
+            }
+        }
     }
 
 
