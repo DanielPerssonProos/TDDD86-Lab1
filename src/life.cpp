@@ -1,11 +1,12 @@
 #include <iostream>
 #include "grid.h"
 #include "lifeutil.h"
-#include <string>
 #include <fstream>
 
-void getFile(fstream::ifstream& input,std::string filename){
-    input.open(filename);
+using namespace std;
+
+void getFile(ifstream& input,std::string filename){
+    input.open(filename.c_str());
 
     if(!input.is_open()){
         std::cout << "Error madafacka" << std::endl;
@@ -29,14 +30,19 @@ int main() {
     std::cout << "Please enter file name: " << std::endl;
     std::cin >> filename;
     ifstream stream;
-    /*getFile(stream, filename);
+    getFile(stream, filename);
 
-    string readLine;
+    string line1;
+    string line2;
 
-    while(stream.getLine(readLine)){
-        std::cout << readLine << std::endl;
-    }
-*/
+    stream >> line1;
+    stream >> line2;
+
+
+      std::cout << line1 << std::endl;
+      std::cout << line2 << std::endl;
+
+
     return 0;
 
 
