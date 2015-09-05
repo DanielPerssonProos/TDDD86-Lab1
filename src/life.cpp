@@ -13,18 +13,21 @@ void getFile(ifstream& input,std::string filename){
     }
 }
 
+Grid<char> initiateGrid(int rows, int cols, ifstream& stream){
+    std::string line;
+    getline(stream, line);
 
-int main() {
+    Grid<char> grid = Grid<char> (rows, cols);
+    for (int row = 0; row < rows; ++row) {
+        getline(stream, line);
+        for (int col = 0; col < cols; ++col) {
+            grid.set(row, col,  line[col]);
+        }
+    }
+    return grid;
+}
 
-    std::cout << "Welcome to the TDDD86 Game of Life," << std::endl
-                << "a simulation of the lifecycle of a bacteria colony." << std::endl
-                << "Cells (X) live and die by the following rules:" << std::endl
-                << "- A cell with 1 or fewer neighbours dies." << std::endl
-                << "- Locations with 2 neighbours remain stable." << std::endl
-                << "- Locations with 3 neighbours will create life." << std::endl
-                << "- A cell with 4 or more neighbours dies." << std::endl << std::endl;
-
-
+Grid<char> loadGrid(){
 
     std::string filename;
     std::cout << "Please enter file name: " << std::endl;
@@ -33,21 +36,104 @@ int main() {
     ifstream stream;
     getFile(stream, filename);
 
-    string line1;
-    string line2;
+    int rows;
+    int cols;
 
-    stream >> line1;
-    stream >> line2;
+    stream >> rows;
+    stream >> cols;
 
+    return initiateGrid(rows,cols,stream);
+}
 
-      std::cout << line1 << std::endl;
-      std::cout << line2 << std::endl;
+void printGrid(Grid<char>& grid) {
+    int rows = grid.numRows();
+    int cols = grid.numCols();
+    string line;
+
+    for (int row = 0; row < rows; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            line += grid[row][col];
+        }
+        std::cout << line << std::endl;
+        line = "";
+    }
+}
+
+const char mSignAlive = 'X';
+const char mSignDead = '-';
+
+bool calculateSurvival(Grid<char>& oldGen, int row, int col) {
+    int nmAliveNeighbors = 0;
+
+    for (int r = row - 1; r <= row + 1; ++r) {
+        for (int c = col - 1; c <= col + 1; ++c) {
+            if (oldGen.inBounds(r, c) && c != col && r != row) {
+                if (oldGen[r][c] == mSignAlive) {
+                    nmAliveNeighbors += 1;
+                }
+            }
+        }
+    }
+
+    return nmAliveNeighbors >= 2 && nmAliveNeighbors < 4;
+}
+
+void advanceGeneration(Grid<char>& oldGen) {
+    int rows = oldGen.numRows();
+    int cols = oldGen.numCols();
+    Grid<char> newGen = Grid<char> (rows, cols);
+
+    for (int row = 0; row < rows; ++row) {
+        for (int col = 0; col < cols; ++col) {
+            if (calculateSurvival(oldGen, row, col)) {
+                newGen.set(row, col, mSignAlive);
+            } else {
+                newGen.set(row, col, mSignDead);
+            }
+        }
+    }
+    oldGen = newGen;
+}
+
+void tick(Grid<char>& grid) {
+    advanceGeneration(grid);
+    pause(100);
+    //clearConsole();
+}
+
+int main() {
+    char mSignAnimate = 'a';
+    char mSignTick    = 't';
+    char mSignQuit    = 'q';
+
+    std::cout << "Welcome to the TDDD86 Game of Life," << std::endl
+                << "a simulation of the lifecycle of a bacteria colony." << std::endl
+                << "Cells (X) live and die by the following rules:" << std::endl
+                << "- A cell with 1 or fewer neighbours dies." << std::endl
+                << "- Locations with 2 neighbours remain stable." << std::endl
+                << "- Locations with 3 neighbours will create life." << std::endl
+                << "- A cell with 4 or more neighbours dies." << std::endl;
+
+    Grid<char> grid = loadGrid();
+    char menuChoice;
+
+    while (true) {
+        printGrid(grid);
+        std::cin >> menuChoice;
+
+        if (menuChoice == mSignTick) {
+            advanceGeneration(grid);
+        } else if (menuChoice == mSignQuit) {
+            break;
+        } else if (menuChoice == mSignAnimate) {
+            while (true) {
+                tick(grid);
+            }
+        }
+    }
+
 
 
     return 0;
-
-
-
-
 }
 
