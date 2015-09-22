@@ -9,7 +9,7 @@ void getFile(ifstream& input,std::string filename){
     input.open(filename.c_str());
 
     if(!input.is_open()){
-        std::cout << "Error madafacka" << std::endl;
+        std::cout << "Error, input file not a present" << std::endl;
     }
 }
 
@@ -62,12 +62,17 @@ void printGrid(Grid<char>& grid) {
 const char mSignAlive = 'X';
 const char mSignDead = '-';
 
+const char mSignAnimate = 'a';
+const char mSignTick    = 't';
+const char mSignQuit    = 'q';
+
+
 bool calculateSurvival(Grid<char>& oldGen, int row, int col) {
     int nmAliveNeighbors = 0;
 
     for (int r = row - 1; r <= row + 1; ++r) {
         for (int c = col - 1; c <= col + 1; ++c) {
-            if (oldGen.inBounds(r, c) && c != col && r != row) {
+            if (oldGen.inBounds(r, c) && (c != col || r != row)) {
                 if (oldGen[r][c] == mSignAlive) {
                     nmAliveNeighbors += 1;
                 }
@@ -75,7 +80,11 @@ bool calculateSurvival(Grid<char>& oldGen, int row, int col) {
         }
     }
 
-    return nmAliveNeighbors >= 2 && nmAliveNeighbors < 4;
+    if(nmAliveNeighbors == 2){
+        return oldGen[row][col] == mSignAlive;
+    }
+
+    return nmAliveNeighbors == 3;
 }
 
 void advanceGeneration(Grid<char>& oldGen) {
@@ -102,9 +111,6 @@ void tick(Grid<char>& grid) {
 }
 
 int main() {
-    char mSignAnimate = 'a';
-    char mSignTick    = 't';
-    char mSignQuit    = 'q';
 
     std::cout << "Welcome to the TDDD86 Game of Life," << std::endl
                 << "a simulation of the lifecycle of a bacteria colony." << std::endl
@@ -117,23 +123,28 @@ int main() {
     Grid<char> grid = loadGrid();
     char menuChoice;
 
-    while (true) {
+    while (menuChoice != mSignQuit) {
+        std::cout << "a)nimate, t)ick, q)uit?" << std::endl;
         printGrid(grid);
         std::cin >> menuChoice;
 
-        if (menuChoice == mSignTick) {
-            advanceGeneration(grid);
-        } else if (menuChoice == mSignQuit) {
-            break;
-        } else if (menuChoice == mSignAnimate) {
+        switch(menuChoice){
+
+        case mSignAnimate:
             while (true) {
                 tick(grid);
+                printGrid(grid);
             }
+            break;
+
+        case mSignTick:
+            advanceGeneration(grid);
+            break;
+
         }
     }
 
-
-
+    std::cout << "Have a nice life!" << std::endl;
     return 0;
 }
 
