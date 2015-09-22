@@ -13,37 +13,18 @@ void getFile(ifstream& input,std::string filename){
     }
 }
 
-Grid<char> initiateGrid(int rows, int cols, ifstream& stream){
+void initiateGrid(Grid<char>& grid, ifstream& stream){
     std::string line;
     getline(stream, line);
 
-    Grid<char> grid = Grid<char> (rows, cols);
-    for (int row = 0; row < rows; ++row) {
+    for (int row = 0; row < grid.numRows(); ++row) {
         getline(stream, line);
-        for (int col = 0; col < cols; ++col) {
+        for (int col = 0; col < grid.numCols(); ++col) {
             grid.set(row, col,  line[col]);
         }
     }
-    return grid;
 }
 
-Grid<char> loadGrid(){
-
-    std::string filename;
-    std::cout << "Please enter file name: " << std::endl;
-    std::cin >> filename;
-
-    ifstream stream;
-    getFile(stream, filename);
-
-    int rows;
-    int cols;
-
-    stream >> rows;
-    stream >> cols;
-
-    return initiateGrid(rows,cols,stream);
-}
 
 void printGrid(Grid<char>& grid) {
     int rows = grid.numRows();
@@ -107,8 +88,8 @@ void advanceGeneration(Grid<char>& oldGen) {
 void tick(Grid<char>& grid) {
     advanceGeneration(grid);
     pause(100);
-    //clearConsole();
-}
+    //clearConsole(); //Enable this if on a "clear screen" compatible machine
+    }
 
 int main() {
 
@@ -120,7 +101,22 @@ int main() {
                 << "- Locations with 3 neighbours will create life." << std::endl
                 << "- A cell with 4 or more neighbours dies." << std::endl;
 
-    Grid<char> grid = loadGrid();
+
+    std::string filename;
+    std::cout << "Please enter file name: " << std::endl;
+    std::cin >> filename;
+
+    ifstream stream;
+    getFile(stream, filename);
+
+    int rows;
+    int cols;
+
+    stream >> rows;
+    stream >> cols;
+    Grid<char> grid = Grid<char> (rows,cols);
+    initiateGrid(grid,stream);
+
     char menuChoice;
 
     while (menuChoice != mSignQuit) {
