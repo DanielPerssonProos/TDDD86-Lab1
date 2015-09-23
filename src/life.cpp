@@ -5,6 +5,7 @@
 
 using namespace std;
 
+/* Opens the input stream */
 void getFile(ifstream& input,std::string filename){
     input.open(filename.c_str());
 
@@ -13,6 +14,7 @@ void getFile(ifstream& input,std::string filename){
     }
 }
 
+/* Fills the grid from the file loaded from ifstream */
 void initiateGrid(Grid<char>& grid, ifstream& stream){
     std::string line;
     getline(stream, line);
@@ -25,7 +27,7 @@ void initiateGrid(Grid<char>& grid, ifstream& stream){
     }
 }
 
-
+/* Prints a grid */
 void printGrid(Grid<char>& grid) {
     int rows = grid.numRows();
     int cols = grid.numCols();
@@ -47,7 +49,7 @@ const char mSignAnimate = 'a';
 const char mSignTick    = 't';
 const char mSignQuit    = 'q';
 
-
+/* calculates the survival of one cell based on surrounding neigbours */
 bool calculateSurvival(Grid<char>& oldGen, int row, int col) {
     int nmAliveNeighbors = 0;
 
@@ -67,7 +69,7 @@ bool calculateSurvival(Grid<char>& oldGen, int row, int col) {
 
     return nmAliveNeighbors == 3;
 }
-
+/* iterates the whole grid and sets the states for next generation */
 void advanceGeneration(Grid<char>& oldGen) {
     int rows = oldGen.numRows();
     int cols = oldGen.numCols();
@@ -84,12 +86,6 @@ void advanceGeneration(Grid<char>& oldGen) {
     }
     oldGen = newGen;
 }
-
-void tick(Grid<char>& grid) {
-    advanceGeneration(grid);
-    pause(100);
-    //clearConsole(); //Enable this if on a "clear screen" compatible machine
-    }
 
 int main() {
 
@@ -114,7 +110,7 @@ int main() {
 
     stream >> rows;
     stream >> cols;
-    Grid<char> grid = Grid<char> (rows,cols);
+    Grid<char> grid = Grid<char> (rows,cols); //creates an empty grid
     initiateGrid(grid,stream);
 
     char menuChoice;
@@ -130,6 +126,8 @@ int main() {
             while (true) {
                 tick(grid);
                 printGrid(grid);
+                pause(100);
+                //clearConsole();//Enable this if on a "clear screen" compatible machine
             }
             break;
 
